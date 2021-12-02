@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button btnSignOut;
     private int RC_SIGN_IN = 1;
+    private ImageView icon;
 
 
     @Override
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
         btnSignOut = findViewById(R.id.sign_out_button);
+        icon = findViewById(R.id.welcome_icon);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -65,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 mGoogleSignInClient.signOut();
                 Toast.makeText(MainActivity.this,"Log out successfully",Toast.LENGTH_SHORT).show();
                 btnSignOut.setVisibility(View.INVISIBLE);
+                signInButton.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.VISIBLE);
+
             }
         });
     }
@@ -90,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"Signed in successfully",Toast.LENGTH_SHORT).show();
             FirebaseGoogleAuth(acc);
             signInButton.setVisibility(View.INVISIBLE);
+            icon.setVisibility(View.INVISIBLE);
         }
         catch (ApiException e){
             Toast.makeText(MainActivity.this,"Sign in failed",Toast.LENGTH_SHORT).show();
@@ -131,12 +138,12 @@ public class MainActivity extends AppCompatActivity {
             String personId = account.getId();
             Uri personPhoto = account.getPhotoUrl();
 
-            Toast.makeText(MainActivity.this,personName + personEmail ,Toast.LENGTH_SHORT).show();
-            signInButton.setVisibility(View.VISIBLE);
+            Toast.makeText(MainActivity.this, "Welcome, " + personName, Toast.LENGTH_SHORT).show();
         }
 
     }
 }
+
 
 
 
