@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mGoogleSignInClient.signOut();
-                Toast.makeText(MainActivity.this,"You are Logged Out",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Log out successfully",Toast.LENGTH_SHORT).show();
                 btnSignOut.setVisibility(View.INVISIBLE);
             }
         });
@@ -87,11 +87,12 @@ public class MainActivity extends AppCompatActivity {
         try{
 
             GoogleSignInAccount acc = completedTask.getResult(ApiException.class);
-            Toast.makeText(MainActivity.this,"Signed In Successfully",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,"Signed in successfully",Toast.LENGTH_SHORT).show();
             FirebaseGoogleAuth(acc);
+            signInButton.setVisibility(View.INVISIBLE);
         }
         catch (ApiException e){
-            Toast.makeText(MainActivity.this,"Sign In Failed",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,"Sign in failed",Toast.LENGTH_SHORT).show();
             FirebaseGoogleAuth(null);
         }
     }
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else{
-            Toast.makeText(MainActivity.this, "acc failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
             Uri personPhoto = account.getPhotoUrl();
 
             Toast.makeText(MainActivity.this,personName + personEmail ,Toast.LENGTH_SHORT).show();
+            signInButton.setVisibility(View.VISIBLE);
         }
 
     }
