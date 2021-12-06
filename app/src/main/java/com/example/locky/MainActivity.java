@@ -1,5 +1,6 @@
 package com.example.locky;
 
+import com.example.locky.Session;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,14 +23,28 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ServerTimestamp;
+import com.google.firestore.v1.DocumentTransform;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
     private SignInButton signInButton;
@@ -139,6 +154,25 @@ public class MainActivity extends AppCompatActivity {
             FirebaseGoogleAuth(acc);
             signInButton.setVisibility(View.INVISIBLE);
             icon.setVisibility(View.INVISIBLE);
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference newSessionRef = db.collection("session").document();
+            Session session = new Session();
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+            session.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            session.setTimestamp(date);
+
+            newSessionRef.set(session).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                    }
+                    else {
+                    }
+                }
+            });
         }
         catch (ApiException e){
             Toast.makeText(MainActivity.this,"Sign in failed",Toast.LENGTH_SHORT).show();
