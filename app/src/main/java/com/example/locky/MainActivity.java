@@ -72,8 +72,9 @@ public class MainActivity extends AppCompatActivity {
         pager2.setAdapter(adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("Home"));
-        tabLayout.addTab(tabLayout.newTab().setText("Collect"));
         tabLayout.addTab(tabLayout.newTab().setText("Deliver"));
+        tabLayout.addTab(tabLayout.newTab().setText("Collect"));
+
 
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
