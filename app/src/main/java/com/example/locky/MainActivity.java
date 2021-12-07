@@ -7,10 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,6 +45,7 @@ import com.google.firestore.v1.DocumentTransform;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -54,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSignOut;
     private int RC_SIGN_IN = 1;
     private ImageView icon;
+
+    private BluetoothAdapter bluetoothAdapter;
+    private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
+    private ArrayAdapter<BluetoothDevice> listAdapter;
 
     TabLayout tabLayout;
     ViewPager2 pager2;
@@ -132,6 +142,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_devices, menu);
+//        if (bluetoothAdapter == null)
+//            menu.findItem(R.id.bt_settings).setEnabled(true);
+//    }
 
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -220,6 +237,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
 
 
