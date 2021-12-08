@@ -1,6 +1,5 @@
 package com.example.locky;
 
-import com.example.locky.Session;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,26 +22,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ServerTimestamp;
-import com.google.firestore.v1.DocumentTransform;
 
-import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -74,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Home"));
         tabLayout.addTab(tabLayout.newTab().setText("Deliver"));
         tabLayout.addTab(tabLayout.newTab().setText("Collect"));
-
 
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
@@ -156,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
             signInButton.setVisibility(View.INVISIBLE);
             icon.setVisibility(View.INVISIBLE);
 
+            /* session db */
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference newSessionRef = db.collection("session").document();
             Session session = new Session();
@@ -175,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
         catch (ApiException e){
             Toast.makeText(MainActivity.this,"Sign in failed",Toast.LENGTH_SHORT).show();
             FirebaseGoogleAuth(null);
@@ -192,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
+
                     } else {
                         Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         updateUI(null);

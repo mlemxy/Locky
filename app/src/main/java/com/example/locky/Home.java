@@ -9,17 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Home#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class Home extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -32,19 +28,16 @@ public class Home extends Fragment {
     private String mParam2;
 
     private ImageView avatar;
+    private TextView name;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mCurrentUser;
+
 
     public Home() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static Home newInstance(String param1, String param2) {
         Home fragment = new Home();
@@ -63,13 +56,33 @@ public class Home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        setDetail();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
 
+    }
+
+    public void setDetail() {
+        /*
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
+
+        TextView name = (TextView) getView().findViewById(R.id.name);
+        name.setText(mCurrentUser.getDisplayName());
+
+
+        avatar = getView().findViewById(R.id.avatar);
+        Picasso.get().load(mCurrentUser.getPhotoUrl())
+                .into(avatar);
+
+        String name = mCurrentUser.getDisplayName();
+        */
     }
 }
