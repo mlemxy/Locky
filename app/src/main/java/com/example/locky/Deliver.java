@@ -189,6 +189,7 @@ public class Deliver extends ListFragment {
         Fragment fragment = new TerminalFragment();
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
+
     }
 
     void refresh() {

@@ -1,6 +1,7 @@
 package com.example.locky;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,11 +35,13 @@ public class Home extends Fragment {
     private String mParam1;
     private String mParam2;
 
+/*
     private ImageView avatar;
     private TextView name, mail;
-
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
+ */
+
 
 
     public Home() {
@@ -74,46 +77,22 @@ public class Home extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
-        name = rootView.findViewById(R.id. name);
-        name.setText(signInAccount.getDisplayName());
+        return rootView;
+    }
 
-        /*
+    /*
+    private void UpdateUI(){
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
         if(signInAccount != null){
             name.setText(signInAccount.getDisplayName());
             mail.setText(signInAccount.getEmail());
-        }
+            avatar = getView().findViewById(R.id.avatar);
 
 
-        name = rootView.findViewById(R.id. name);
-        mail = rootView.findViewById(R.id.mail);
+        Picasso.get().load(mCurrentUser.getPhotoUrl()).into(avatar);
 
-
-        mAuth = FirebaseAuth.getInstance();
-        mCurrentUser = mAuth.getCurrentUser();
-        name.setText(mCurrentUser.getDisplayName());
-
-     */
-
-        return rootView;
-
-    }
-        /*
-
-
-        TextView name = (TextView) findViewById(R.id.name);
-
-        mAuth = FirebaseAuth.getInstance();
-        mCurrentUser = mAuth.getCurrentUser();
-
-        TextView name = (TextView) getView().findViewById(R.id.name);
-        name.setText(mCurrentUser.getDisplayName());
-
-
-        avatar = getView().findViewById(R.id.avatar);
-        Picasso.get().load(mCurrentUser.getPhotoUrl())
-                .into(avatar);
-
-        String name = mCurrentUser.getDisplayName();
         */
 }
+
+
+
