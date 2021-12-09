@@ -1,5 +1,6 @@
 package com.example.locky;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,9 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
+
 
 
 public class Home extends Fragment {
@@ -28,7 +35,8 @@ public class Home extends Fragment {
     private String mParam2;
 
     private ImageView avatar;
-    private TextView name;
+    private TextView name, mail;
+
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
 
@@ -56,8 +64,6 @@ public class Home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        setDetail();
     }
 
     @Override
@@ -65,12 +71,38 @@ public class Home extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
+        name = rootView.findViewById(R.id. name);
+        name.setText(signInAccount.getDisplayName());
+
+        /*
+        if(signInAccount != null){
+            name.setText(signInAccount.getDisplayName());
+            mail.setText(signInAccount.getEmail());
+        }
+
+
+        name = rootView.findViewById(R.id. name);
+        mail = rootView.findViewById(R.id.mail);
+
+
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
+        name.setText(mCurrentUser.getDisplayName());
+
+     */
+
+        return rootView;
 
     }
-
-    public void setDetail() {
         /*
+
+
+        TextView name = (TextView) findViewById(R.id.name);
+
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
 
@@ -84,5 +116,4 @@ public class Home extends Fragment {
 
         String name = mCurrentUser.getDisplayName();
         */
-    }
 }

@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignOut = findViewById(R.id.sign_out_button);
         icon = findViewById(R.id.welcome_icon);
 
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -143,12 +144,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.menu_devices, menu);
-//        if (bluetoothAdapter == null)
-//            menu.findItem(R.id.bt_settings).setEnabled(true);
-//    }
+    /*
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_devices, menu);
+        if (bluetoothAdapter == null)
+            menu.findItem(R.id.bt_settings).setEnabled(true);
+    } */
 
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -235,10 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(MainActivity.this, "Welcome, " + personName, Toast.LENGTH_SHORT).show();
         }
-
     }
-
-
 }
 
 
