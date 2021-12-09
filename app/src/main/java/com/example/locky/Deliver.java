@@ -180,6 +180,16 @@ public class Deliver extends ListFragment {
     public void setEmptyText(@Nullable CharSequence text) {
     }
 
+    @Override
+    public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        Log.i("click", "click");
+        BluetoothDevice device = listItems.get(position-1);
+        Bundle args = new Bundle();
+        args.putString("device", device.getAddress());
+        Fragment fragment = new TerminalFragment();
+        fragment.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
+    }
 
     void refresh() {
         listItems.clear();
