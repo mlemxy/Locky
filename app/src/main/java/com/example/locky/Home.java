@@ -1,5 +1,7 @@
 package com.example.locky;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,17 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Home#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.w3c.dom.Text;
+
+
+
 public class Home extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -31,20 +35,20 @@ public class Home extends Fragment {
     private String mParam1;
     private String mParam2;
 
+/*
     private ImageView avatar;
+    private TextView name, mail;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mCurrentUser;
+ */
+
+
 
     public Home() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static Home newInstance(String param1, String param2) {
         Home fragment = new Home();
@@ -69,7 +73,26 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+
+        return rootView;
     }
+
+    /*
+    private void UpdateUI(){
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
+        if(signInAccount != null){
+            name.setText(signInAccount.getDisplayName());
+            mail.setText(signInAccount.getEmail());
+            avatar = getView().findViewById(R.id.avatar);
+
+
+        Picasso.get().load(mCurrentUser.getPhotoUrl()).into(avatar);
+
+        */
 }
+
+
+

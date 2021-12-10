@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -55,11 +56,13 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private SignInButton signInButton;
     private GoogleSignInClient mGoogleSignInClient;
-    private  String TAG = "MainActivity";
+    private String TAG = "MainActivity";
     private FirebaseAuth mAuth;
     private Button btnSignOut;
     private int RC_SIGN_IN = 1;
     private ImageView icon;
+
+//    private TextView name, mail;
 
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignOut = findViewById(R.id.sign_out_button);
         icon = findViewById(R.id.welcome_icon);
 
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -109,11 +113,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mGoogleSignInClient.signOut();
                 Toast.makeText(MainActivity.this,"Log out successfully",Toast.LENGTH_SHORT).show();
-                btnSignOut.setVisibility(View.INVISIBLE);
-                tabLayout.setVisibility(View.INVISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
-                icon.setVisibility(View.VISIBLE);
 
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -142,12 +145,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.menu_devices, menu);
-//        if (bluetoothAdapter == null)
-//            menu.findItem(R.id.bt_settings).setEnabled(true);
-//    }
+    /*
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_devices, menu);
+        if (bluetoothAdapter == null)
+            menu.findItem(R.id.bt_settings).setEnabled(true);
+    } */
 
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -229,6 +233,11 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser fUser){
         btnSignOut.setVisibility(View.VISIBLE);
         tabLayout.setVisibility(View.VISIBLE);
+/*
+        name.setVisibility(View.VISIBLE);
+        mail.setVisibility(View.VISIBLE);
+ */
+
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account !=  null){
             String personName = account.getDisplayName();
@@ -238,12 +247,15 @@ public class MainActivity extends AppCompatActivity {
             String personId = account.getId();
             Uri personPhoto = account.getPhotoUrl();
 
+/*
+            name.setText(personName);
+            mail.setText(personEmail);
+*/
             Toast.makeText(MainActivity.this, "Welcome, " + personName, Toast.LENGTH_SHORT).show();
+
+
         }
-
     }
-
-
 }
 
 

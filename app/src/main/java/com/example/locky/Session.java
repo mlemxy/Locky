@@ -13,7 +13,6 @@ public class Session {
     private @ServerTimestamp Date timestamp;
 
 
-
     public Session(String Email, Date timestamp) {
         this.Email = Email;
         this.timestamp = timestamp;

@@ -10,4 +10,19 @@
         android:name="com.example.locky.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.example.locky.Home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/deliver"
+        android:name="com.example.locky.Deliver"
+        android:label="fragment_deliver"
+        tools:layout="@layout/fragment_deliver" />
+    <fragment
+        android:id="@+id/collect"
+        android:name="com.example.locky.Collect"
+        android:label="fragment_collect"
+        tools:layout="@layout/fragment_collect" />
 </navigation>
