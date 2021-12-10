@@ -61,12 +61,13 @@ public class Deliver extends ListFragment {
      * @return A new instance of fragment Deliver.
      */
     // TODO: Rename and change types and number of parameters
-    public static Deliver newInstance(String param1, String param2) {
+    public Deliver newInstance(String param1, String param2) {
         Deliver fragment = new Deliver();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+//        getFragmentManager().beginTransaction().add(R.id.fragment, new Deliver(), "devices").commit();
         return fragment;
     }
 
@@ -130,6 +131,9 @@ public class Deliver extends ListFragment {
                     view = getActivity().getLayoutInflater().inflate(R.layout.fragment_deliver, container, false);
                 TextView text1 = view.findViewById(R.id.text1);
                 TextView text2 = view.findViewById(R.id.text2);
+//                view.findViewById(R.id.text1).setVisibility(view.VISIBLE);
+//                view.findViewById(R.id.text2).setVisibility(view.VISIBLE);
+//                view.findViewById(R.id.devices).setVisibility(View.VISIBLE);
                 text1.setText(device.getName());
                 text2.setText(device.getAddress());
                 return view;
@@ -189,6 +193,12 @@ public class Deliver extends ListFragment {
         Fragment fragment = new TerminalFragment();
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
+//        v = getActivity().getLayoutInflater().inflate(R.layout.fragment_setup, null, false);
+//        v.findViewById(R.id.devices).setVisibility(View.GONE);
+//        v.findViewById(R.id.text1).setVisibility(v.GONE);
+//        v.findViewById(R.id.text2).setVisibility(v.GONE);
+
+
     }
 
     void refresh() {
@@ -209,6 +219,7 @@ public class Deliver extends ListFragment {
         Collections.sort(listItems, Deliver::compareTo);
         listAdapter.notifyDataSetChanged();
         Log.i("length", String.valueOf(listAdapter.getCount()));
+
 
     }
 
