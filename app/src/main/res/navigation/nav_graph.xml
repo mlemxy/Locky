@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/deliver"
-        android:name="com.example.locky.Book"
+        android:name="com.example.locky.Deliver"
         android:label="fragment_deliver"
         tools:layout="@layout/fragment_deliver" />
     <fragment

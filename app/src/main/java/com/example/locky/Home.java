@@ -70,35 +70,6 @@ public class Home extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        /*
-        private ImageView avatar;
-        private TextView name, mail;
-        private FirebaseUser firebaseUser;
-
-        name = rootView.findViewById(R.id.name);
-        mail = rootView.findViewById(R.id.mail);
-        avatar = rootView.findViewById(R.id.avatar);
-
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-        if(account !=  null){
-            String personName = account.getDisplayName();
-            String personGivenName = account.getGivenName();
-            String personFamilyName = account.getFamilyName();
-            String personEmail = account.getEmail();
-            String personId = account.getId();
-            Uri personPhoto = account.getPhotoUrl();
-
-            name.setVisibility(View.VISIBLE);
-            mail.setVisibility(View.VISIBLE);
-            avatar.setVisibility(View.VISIBLE);
-
-            name.setText(personName);
-            mail.setText(personEmail);
-            Picasso.get().load(personPhoto).into(avatar);
-        }
-        */
-
         return rootView;
     }
 }

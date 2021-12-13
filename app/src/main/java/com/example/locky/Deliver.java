@@ -36,9 +36,7 @@ public class Deliver extends ListFragment {
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
     private ArrayAdapter<BluetoothDevice> listAdapter;
-//    protected View mView;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -49,74 +47,25 @@ public class Deliver extends ListFragment {
 
 
     public Deliver() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Deliver.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public Deliver newInstance(String param1, String param2) {
         Deliver fragment = new Deliver();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-//        getFragmentManager().beginTransaction().add(R.id.fragment, new Deliver(), "devices").commit();
         return fragment;
     }
 
-//    ListView l;
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//
-////        super.onCreate(savedInstanceState);
-////        setHasOptionsMenu(true);
-//        Log.i("item count", String.valueOf(listItems.stream().count()));
-//        View view = inflater.inflate(R.layout.fragment_deliver, container, false);
-//        Log.i("Create", "Fragment created");
-////        this.mView = view;
-//
-//        listAdapter = new ArrayAdapter<BluetoothDevice>(getActivity(), R.layout.fragment_deliver , listItems) {
-//            @NonNull
-//            @Override
-//            public View getView(int position, View view, @NonNull ViewGroup parent) {
-//                Log.i("view", "getting view");
-//                BluetoothDevice device = listItems.get(position);
-////                if (view == null)
-////                    view = getActivity().getLayoutInflater().inflate(R.layout.fragment_deliver, parent, false);
-//                TextView text1 = view.findViewById(R.id.text1);
-//                TextView text2 = view.findViewById(R.id.text2);
-//                text1.setText(device.getName());
-//                text2.setText(device.getAddress());
-//                return view;
-//            }
-//        };
-//
-//        Log.i("listadapter", String.valueOf(listAdapter.getCount()));
-//
-//
-//        return view;
-//
-//
-//    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+
         if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Log.i("bluetooth", "enabled");
@@ -131,9 +80,7 @@ public class Deliver extends ListFragment {
                     view = getActivity().getLayoutInflater().inflate(R.layout.fragment_deliver, container, false);
                 TextView text1 = view.findViewById(R.id.text1);
                 TextView text2 = view.findViewById(R.id.text2);
-//                view.findViewById(R.id.text1).setVisibility(view.VISIBLE);
-//                view.findViewById(R.id.text2).setVisibility(view.VISIBLE);
-//                view.findViewById(R.id.devices).setVisibility(View.VISIBLE);
+
                 text1.setText(device.getName());
                 text2.setText(device.getAddress());
                 return view;
@@ -149,9 +96,7 @@ public class Deliver extends ListFragment {
         View header = getActivity().getLayoutInflater().inflate(R.layout.fragment_deliver, null, false);
         getListView().addHeaderView(header, null, false);
         setEmptyText("initializing...");
-        //Toast.makeText(getActivity(), "initializing...", Toast.LENGTH_SHORT).show();
 
-//        ((TextView) getListView().getEmptyView()).setTextSize(18);
         setListAdapter(listAdapter);
     }
 
@@ -192,11 +137,6 @@ public class Deliver extends ListFragment {
         args.putString("device", device.getAddress());
         Fragment fragment = new TerminalFragment();
         fragment.setArguments(args);
-        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
-//        v = getActivity().getLayoutInflater().inflate(R.layout.fragment_setup, null, false);
-//        v.findViewById(R.id.devices).setVisibility(View.GONE);
-//        v.findViewById(R.id.text1).setVisibility(v.GONE);
-//        v.findViewById(R.id.text2).setVisibility(v.GONE);
 
 
     }
