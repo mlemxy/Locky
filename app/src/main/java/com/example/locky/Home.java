@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,14 +35,6 @@ public class Home extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-/*
-    private ImageView avatar;
-    private TextView name, mail;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mCurrentUser;
- */
-
 
 
     public Home() {
@@ -73,26 +66,39 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
+        /*
+        private ImageView avatar;
+        private TextView name, mail;
+        private FirebaseUser firebaseUser;
+
+        name = rootView.findViewById(R.id.name);
+        mail = rootView.findViewById(R.id.mail);
+        avatar = rootView.findViewById(R.id.avatar);
+
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        if(account !=  null){
+            String personName = account.getDisplayName();
+            String personGivenName = account.getGivenName();
+            String personFamilyName = account.getFamilyName();
+            String personEmail = account.getEmail();
+            String personId = account.getId();
+            Uri personPhoto = account.getPhotoUrl();
+
+            name.setVisibility(View.VISIBLE);
+            mail.setVisibility(View.VISIBLE);
+            avatar.setVisibility(View.VISIBLE);
+
+            name.setText(personName);
+            mail.setText(personEmail);
+            Picasso.get().load(personPhoto).into(avatar);
+        }
+        */
+
         return rootView;
     }
-
-    /*
-    private void UpdateUI(){
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
-        if(signInAccount != null){
-            name.setText(signInAccount.getDisplayName());
-            mail.setText(signInAccount.getEmail());
-            avatar = getView().findViewById(R.id.avatar);
-
-
-        Picasso.get().load(mCurrentUser.getPhotoUrl()).into(avatar);
-
-        */
 }
-
-
-

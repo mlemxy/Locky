@@ -1,26 +1,25 @@
 package com.example.locky;
 
-import com.example.locky.Session;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,31 +28,23 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ServerTimestamp;
-import com.google.firestore.v1.DocumentTransform;
+import com.squareup.picasso.Picasso;
 
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
+
     private SignInButton signInButton;
     private GoogleSignInClient mGoogleSignInClient;
     private String TAG = "MainActivity";
@@ -61,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSignOut;
     private int RC_SIGN_IN = 1;
     private ImageView icon;
-
-//    private TextView name, mail;
 
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
@@ -112,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mAuth.getInstance().signOut();
                 mGoogleSignInClient.signOut();
                 Toast.makeText(MainActivity.this,"Log out successfully",Toast.LENGTH_SHORT).show();
 
@@ -146,14 +137,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_devices, menu);
-        if (bluetoothAdapter == null)
-            menu.findItem(R.id.bt_settings).setEnabled(true);
-    } */
-
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -183,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
             signInButton.setVisibility(View.INVISIBLE);
             icon.setVisibility(View.INVISIBLE);
 
+/*
+            re-paste this part if there's error w login
+
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference newSessionRef = db.collection("session").document();
             Session session = new Session();
@@ -201,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+*/
         }
         catch (ApiException e){
             Toast.makeText(MainActivity.this,"Sign in failed",Toast.LENGTH_SHORT).show();
@@ -234,10 +221,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser fUser){
         btnSignOut.setVisibility(View.VISIBLE);
         tabLayout.setVisibility(View.VISIBLE);
-/*
-        name.setVisibility(View.VISIBLE);
-        mail.setVisibility(View.VISIBLE);
- */
+
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account !=  null){
@@ -248,13 +232,8 @@ public class MainActivity extends AppCompatActivity {
             String personId = account.getId();
             Uri personPhoto = account.getPhotoUrl();
 
-/*
-            name.setText(personName);
-            mail.setText(personEmail);
-*/
+
             Toast.makeText(MainActivity.this, "Welcome, " + personName, Toast.LENGTH_SHORT).show();
-
-
         }
     }
 }
