@@ -4,8 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.squareup.picasso.Picasso;
 
 
 public class Home extends Fragment {
@@ -19,6 +25,8 @@ public class Home extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    TextView name, mail;
+    ImageView avatar;
 
     public Home() {
         // Required empty public constructor
@@ -52,7 +60,20 @@ public class Home extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        TextView name = (TextView) rootView.findViewById(R.id.name);
+        TextView mail = (TextView) rootView.findViewById(R.id.mail);
+        ImageView avatar = (ImageView) rootView.findViewById(R.id.avatar);
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext().getApplicationContext());
+        if (signInAccount != null) {
+            name.setText("Username: " + signInAccount.getDisplayName());
+            mail.setText("Email: " + signInAccount.getEmail());
+            Picasso.get().load(signInAccount.getPhotoUrl()).into(avatar);
+
+        }
+
 
         return rootView;
     }
+
 }
