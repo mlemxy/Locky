@@ -35,7 +35,7 @@ import java.util.Random;
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
-    private enum Connected { False, Pending, True }
+    private enum Connected {False, Pending, True}
 
     private String deviceAddress;
     private SerialService service;
@@ -46,12 +46,11 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private String lockerNum;
 
 
-
     //private TextUtil.HexWatcher hexWatcher;
 
     private Connected connected = Connected.False;
     private boolean initialStart = true;
-//    private boolean hexEnabled = false;
+    //    private boolean hexEnabled = false;
     private boolean pendingNewline = false;
     private String newline = TextUtil.newline_crlf;
 
@@ -84,11 +83,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     public void onStart() {
         super.onStart();
         Log.i("start", "running");
-        if(service != null) {
+        if (service != null) {
             service.attach(this);
             Log.i("service not null", "true");
-        }
-        else {
+        } else {
             Log.i("starting serial service", "running");
             getActivity().startService(new Intent(getActivity(), SerialService.class));
             Log.i("serial service", String.valueOf(service));
@@ -97,12 +95,13 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public void onStop() {
-        if(service != null && !getActivity().isChangingConfigurations())
+        if (service != null && !getActivity().isChangingConfigurations())
             service.detach();
         super.onStop();
     }
 
-    @SuppressWarnings("deprecation") // onAttach(context) was added with API 23. onAttach(activity) works for all API versions
+    @SuppressWarnings("deprecation")
+    // onAttach(context) was added with API 23. onAttach(activity) works for all API versions
     @Override
     public void onAttach(@NonNull Activity activity) {
         Log.i("Attach", "running");
@@ -112,14 +111,17 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public void onDetach() {
-        try { getActivity().unbindService(this); } catch(Exception ignored) {}
+        try {
+            getActivity().unbindService(this);
+        } catch (Exception ignored) {
+        }
         super.onDetach();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(initialStart && service != null) {
+        if (initialStart && service != null) {
             initialStart = false;
             getActivity().runOnUiThread(this::connect);
         }
@@ -130,7 +132,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         service = ((SerialService.SerialBinder) binder).getService();
         Log.i("service", String.valueOf(service));
         service.attach(this);
-        if(initialStart && isResumed()) {
+        if (initialStart && isResumed()) {
             initialStart = false;
             getActivity().runOnUiThread(this::connect);
         }
@@ -179,14 +181,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
             }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
 
                     if ((receiveText.getText().toString().length() == 4) && (s.length() == 4)) {
-                        Log.i("received",receiveText.getText().toString());
+                        Log.i("received", receiveText.getText().toString());
                         receiveText.removeTextChangedListener(this);
                         String fxBTresponse = receiveText.getText().toString();
                         Log.i("fxBTresponse", fxBTresponse);
@@ -228,7 +231,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                         receiveText.setText("");
                         receiveText.addTextChangedListener(this);
                     }
-                } catch(NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     //do whatever you like when value is incorrect
 
                 }
@@ -279,7 +282,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
      */
     private void connect() {
         try {
-            Log.i("device address1","running");
+            Log.i("device address1", "running");
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
             Log.i("device address", deviceAddress);
@@ -289,7 +292,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             SerialSocket socket = new SerialSocket(getActivity().getApplicationContext(), device);
             service.connect(socket);
             lockerNum = device.getName().toUpperCase();
-
 
 
         } catch (Exception e) {
@@ -306,19 +308,18 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         //if the str is master key, reset code $MM#
         //Authenticate here to check if user is supposed to have access. if yes send MM string , if no keep as Red.
-        if(str.equals("000000")){
+        if (str.equals("000000")) {
             Log.i("before", str);
             str = "$MM#";
             Log.i("after", str);
-        }
-        else {
+        } else {
             Random random = new Random();
             int r = random.nextInt(999999);
             str = ('$' + String.valueOf(r) + "#");
             Log.i("random", str);
         }
 
-        if(connected != Connected.True) {
+        if (connected != Connected.True) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -355,7 +356,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 //        } else {
 //            String msg = new String(data);
         Log.i("e1", msg);
-        if(newline.equals(TextUtil.newline_crlf) && msg.length() > 0) {
+        if (newline.equals(TextUtil.newline_crlf) && msg.length() > 0) {
             // don't show CR as ^M if directly before LF
             msg = msg.replace(TextUtil.newline_crlf, TextUtil.newline_lf);
             Log.i("e2", msg);
@@ -369,15 +370,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             Log.i("e3", msg);
         }
 
-            //Will open when connect "$AA#" "$AE#", pop up to set password
-            //If someone booked, will wait for password "$BA#" "$BI#"
-            //if password correct, will unlock and reset
-            //Master reset need to send $MM#
-            //Password set of unlock is $PPPPPP#
-            //limit password to 6 digits.
-            Log.i("e4",msg);
+        //Will open when connect "$AA#" "$AE#", pop up to set password
+        //If someone booked, will wait for password "$BA#" "$BI#"
+        //if password correct, will unlock and reset
+        //Master reset need to send $MM#
+        //Password set of unlock is $PPPPPP#
+        //limit password to 6 digits.
+        Log.i("e4", msg);
 
-            receiveText.append(msg);
+        receiveText.append(msg);
     }
 //    }
 

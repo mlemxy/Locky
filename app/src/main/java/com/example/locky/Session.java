@@ -10,7 +10,8 @@ import java.util.Date;
 public class Session {
 
     private String Email;
-    private @ServerTimestamp Date timestamp;
+    private @ServerTimestamp
+    Date timestamp;
 
 
     public Session(String Email, Date timestamp) {
@@ -21,10 +22,20 @@ public class Session {
     public Session() {
     }
 
-    public String getEmail() { return Email; }
-    public void setEmail(String Email) { this.Email = Email; }
+    public String getEmail() {
+        return Email;
+    }
 
-    public Date getTimestamp() { return timestamp; }
-    public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
 }

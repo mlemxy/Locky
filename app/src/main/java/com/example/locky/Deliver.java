@@ -5,14 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,15 +15,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Deliver#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class Deliver extends ListFragment {
 
     private BluetoothAdapter bluetoothAdapter;
@@ -137,6 +130,7 @@ public class Deliver extends ListFragment {
         args.putString("device", device.getAddress());
         Fragment fragment = new TerminalFragment();
         fragment.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
 
 
     }

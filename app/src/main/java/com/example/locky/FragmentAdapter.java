@@ -14,8 +14,7 @@ public class FragmentAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position)
-        {
+        switch (position) {
             case 1:
                 return new Deliver();
 
