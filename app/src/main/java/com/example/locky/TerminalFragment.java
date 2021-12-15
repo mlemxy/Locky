@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +65,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         setRetainInstance(true);
         assert getArguments() != null;
         deviceAddress = getArguments().getString("device");
@@ -168,12 +170,16 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         //getActivity().onBackPressed();
 
         View sendBtn = view.findViewById(R.id.send_btn);
+        View sendBtn2 = view.findViewById(R.id.send_btn2);
+
         sendBtn.setOnClickListener(v -> send(sendText.getText().toString()));
+        sendBtn2.setOnClickListener(v -> send(""));
 
         view.findViewById(R.id.confirmPWrow).setVisibility(View.GONE);
         view.findViewById(R.id.unlockPWrow).setVisibility(View.GONE);
         view.findViewById(R.id.buttonrow).setVisibility(View.GONE);
         view.findViewById(R.id.textView2).setVisibility(View.GONE);
+        view.findViewById(R.id.buttonrow2).setVisibility(View.GONE);
 
         receiveText.addTextChangedListener(new TextWatcher() {
 
@@ -203,20 +209,24 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                         ((TextView) view.findViewById(R.id.textView2)).setText(lockerNum);
 
                         if (fxBTresponse.charAt(1) == 'A') {
+                            ((EditText) view.findViewById(R.id.send_text)).setText("");
                             view.findViewById(R.id.confirmPWrow).setVisibility(View.GONE);
                             view.findViewById(R.id.unlockPWrow).setVisibility(View.VISIBLE);
                             view.findViewById(R.id.buttonrow).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.buttonrow2).setVisibility(View.GONE);
 
+//                            ((EditText) view.findViewById(R.id.send_text)).setText("");
                             ((TextView) view.findViewById(R.id.textView)).setText(R.string.TitleTextSet);
                             ((Button) sendBtn).setText(R.string.buttonSet);
                             Toast.makeText(getActivity(), "AVAILABLE!", Toast.LENGTH_SHORT).show();
 
                         } else if (fxBTresponse.charAt(1) == 'B') {
                             view.findViewById(R.id.confirmPWrow).setVisibility(View.GONE);
-                            view.findViewById(R.id.unlockPWrow).setVisibility(View.VISIBLE);
-                            view.findViewById(R.id.buttonrow).setVisibility(View.VISIBLE);
-                            ((TextView) view.findViewById(R.id.textView)).setText(R.string.TitleText);
-                            ((Button) sendBtn).setText(R.string.button);
+                            view.findViewById(R.id.unlockPWrow).setVisibility(View.GONE);
+                            view.findViewById(R.id.buttonrow).setVisibility(View.GONE);
+                            view.findViewById(R.id.buttonrow2).setVisibility(View.VISIBLE);
+//                            ((TextView) view.findViewById(R.id.textView)).setText(R.string.TitleText);
+                            ((Button) sendBtn2).setText(R.string.button);
                             Toast.makeText(getActivity(), "BOOKED!", Toast.LENGTH_SHORT).show();
 
                         } else if (fxBTresponse.charAt(1) == 'O') {
@@ -308,7 +318,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         //if the str is master key, reset code $MM#
         //Authenticate here to check if user is supposed to have access. if yes send MM string , if no keep as Red.
-        if (str.equals("000000")) {
+        if (str.equals("000000") | str.equals("")) {
             Log.i("before", str);
             str = "$MM#";
             Log.i("after", str);

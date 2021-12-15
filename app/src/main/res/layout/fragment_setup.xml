@@ -12,6 +12,16 @@
         android:layout_height="30dp" />
 
     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="@string/devicesNO"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+    <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,14 +30,6 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:text="@string/devicesNO"
-        android:textSize="24sp"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/receive_text"
@@ -61,9 +63,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="password"
-            android:inputType="number|numberPassword"
-            android:password="true"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
             android:singleLine="true"
             android:textSize="30sp" />
 
@@ -82,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <Space
             android:layout_width="20dp"
@@ -122,6 +123,32 @@
 
         <Button
             android:id="@+id/send_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonrow2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/send_btn2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

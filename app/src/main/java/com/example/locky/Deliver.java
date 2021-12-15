@@ -137,10 +137,12 @@ public class Deliver extends ListFragment {
 
     void refresh() {
         listItems.clear();
+        Log.i("Clear", String.valueOf(listItems.stream().count()));
         if (bluetoothAdapter != null) {
             for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
                 if (device.getType() != BluetoothDevice.DEVICE_TYPE_LE) {
                     if (device.getAddress().equals("08:3A:F2:52:25:A2") | device.getAddress().equals("7C:9E:BD:61:E6:C2")) {
+//                       if (booked_status == True) {}
 //                        if(device.getName().substring(0,6).equalsIgnoreCase("LOCKER")) {
                         Log.i("found", device.getName());
                         listItems.add(device);
