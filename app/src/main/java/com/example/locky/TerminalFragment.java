@@ -322,6 +322,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         //Authenticate here to check if user is supposed to have access. if yes send MM string , if no keep as Red.
 
         if (str.equals("")) {
+
+
             Log.i("before", str);
             str = "$MM#";
             Log.i("after", str);
