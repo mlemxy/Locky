@@ -20,6 +20,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -37,7 +44,8 @@ public class Deliver extends ListFragment {
     private String mParam1;
     private String mParam2;
 
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference LockerRef = db.collection("locker");
 
     public Deliver() {
     }
@@ -141,22 +149,30 @@ public class Deliver extends ListFragment {
         if (bluetoothAdapter != null) {
             for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
                 if (device.getType() != BluetoothDevice.DEVICE_TYPE_LE) {
-                    if (device.getAddress().equals("08:3A:F2:52:25:A2") | device.getAddress().equals("7C:9E:BD:61:E6:C2")) {
-//                       if (booked_status == True) {}
-//                        if(device.getName().substring(0,6).equalsIgnoreCase("LOCKER")) {
-                        Log.i("found", device.getName());
-                        listItems.add(device);
-                        Log.i("items", String.valueOf(listItems.stream().count()));
-//                        }
-                    }
+                    LockerRef.whereEqualTo("booked_status", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (device.getAddress().equals(document.get("mac_address"))) {
+                                        Log.i("found", device.getName());
+                                        listItems.add(device);
+                                        Log.i("items", String.valueOf(listItems.stream().count()));
+                                        Collections.sort(listItems, Deliver::compareTo);
+                                        listAdapter.notifyDataSetChanged();
+                                        Log.i("length", String.valueOf(listAdapter.getCount()));
+                                    }
+                                }
+                            }
+                            else {
+                                Log.i("error", "error");
+
+                            }
+                        }
+                    });
                 }
             }
         }
-        Collections.sort(listItems, Deliver::compareTo);
-        listAdapter.notifyDataSetChanged();
-        Log.i("length", String.valueOf(listAdapter.getCount()));
-
-
     }
 
     static int compareTo(BluetoothDevice a, BluetoothDevice b) {
