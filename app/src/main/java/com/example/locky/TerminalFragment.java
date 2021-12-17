@@ -31,7 +31,21 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -318,16 +332,34 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         //if the str is master key, reset code $MM#
         //Authenticate here to check if user is supposed to have access. if yes send MM string , if no keep as Red.
-        if (str.equals("000000") | str.equals("")) {
+        if (str.equals("")) {
             Log.i("before", str);
             str = "$MM#";
             Log.i("after", str);
         } else {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference lockerRef = db.collection("locker").document(lockerNum.toLowerCase());
+
+            lockerRef
+                    .update("booked_status", true, "receiver", str)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    });
+
+
             Random random = new Random();
             int r = random.nextInt(999999);
             str = ('$' + String.valueOf(r) + "#");
             Log.i("random", str);
+
         }
+
 
         if (connected != Connected.True) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
@@ -426,5 +458,4 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         disconnect();
         Toast.makeText(getActivity(), "Connection lost!", Toast.LENGTH_SHORT).show();
     }
-
 }
