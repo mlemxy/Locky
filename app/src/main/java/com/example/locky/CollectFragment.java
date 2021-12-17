@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,15 +30,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Objects;
 import java.util.Random;
 
-public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
+public class CollectFragment extends Fragment implements ServiceConnection, SerialListener {
 
     private enum Connected {False, Pending, True}
 
@@ -238,6 +232,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                         } else if (fxBTresponse.charAt(1) == 'O') {
                             Toast.makeText(getActivity(), "UNLOCKED!", Toast.LENGTH_SHORT).show();
 
+
                         }
                         receiveText.removeTextChangedListener(this);
                         receiveText.setText("");
@@ -317,7 +312,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     }
 
     private void send(String str) {
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         //if the str is master key, reset code $MM#
         //Authenticate here to check if user is supposed to have access. if yes send MM string , if no keep as Red.
 
@@ -326,20 +321,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             str = "$MM#";
             Log.i("after", str);
         } else {
-
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference lockerRef = db.collection("locker").document(lockerNum.toLowerCase());
-
-            lockerRef.update("booked_status", true, "receiver", str, "booked_by", signInAccount.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                }
-            });
-
             Random random = new Random();
             int r = random.nextInt(999999);
             str = ('$' + String.valueOf(r) + "#");
