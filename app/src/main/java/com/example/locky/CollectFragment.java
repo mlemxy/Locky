@@ -30,10 +30,16 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Random;
 
@@ -325,6 +331,7 @@ public class CollectFragment extends Fragment implements ServiceConnection, Seri
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference lockerRef = db.collection("locker").document(lockerNum.toLowerCase());
 
+
             lockerRef.update("booked_status", false, "receiver", "", "booked_by", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -334,6 +341,7 @@ public class CollectFragment extends Fragment implements ServiceConnection, Seri
                 public void onFailure(@NonNull Exception e) {
                 }
             });
+
 
             Log.i("before", str);
             str = "$MM#";
