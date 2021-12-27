@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    CountDownTimer timer;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -68,39 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("notification", "Parcel", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-
-        }
-
-        db.collection("locker")
-                .whereEqualTo("booked_status", true)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (mAuth.getCurrentUser().getEmail().equals(document.get("receiver"))) {
-                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "notification");
-                                    builder.setContentTitle("Locky");
-                                    builder.setContentText("Someone sent you a parcel!");
-                                    builder.setSmallIcon(R.drawable.ic_launcher_background);
-
-                                    builder.setAutoCancel(true);
-                                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
-                                    managerCompat.notify(1, builder.build());
-
-                                }
-                            }
-                        } else {
-                        }
-                    }
-                });
-
+        newNotification();
         createRequest();
 
         findViewById(R.id.google_signIn).setOnClickListener(new View.OnClickListener() {
@@ -109,6 +80,54 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+    }
+
+    private void newNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notification", "Parcel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+
+        }
+
+        timer = new CountDownTimer(30000, 5000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                db.collection("locker")
+                        .whereEqualTo("booked_status", true)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if (mAuth.getCurrentUser().getEmail().equals(document.get("receiver"))) {
+
+                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "notification");
+                                            builder.setContentTitle("Locky");
+                                            builder.setContentText("Someone sent you a parcel!");
+                                            builder.setSmallIcon(R.drawable.ic_launcher_background);
+
+                                            builder.setAutoCancel(true);
+                                            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
+                                            managerCompat.notify(1, builder.build());
+                                        } else {
+                                        }
+                                    }
+                                } else {
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void onFinish() {
+                timer.start();
+            }
+        }.start();
+
+
 
     }
 

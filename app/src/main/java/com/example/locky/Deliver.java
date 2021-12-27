@@ -36,6 +36,7 @@ public class Deliver extends ListFragment {
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
     private ArrayAdapter<BluetoothDevice> listAdapter;
+    private SerialService service;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -84,6 +85,7 @@ public class Deliver extends ListFragment {
 
                 text1.setText(device.getName());
                 text2.setText(device.getAddress());
+
                 return view;
             }
         };

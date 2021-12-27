@@ -16,10 +16,13 @@ import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
 /**
  * create notification and queue serial data while activity is not in the foreground
  * use listener chain: SerialSocket -> SerialService -> UI fragment
@@ -84,6 +87,7 @@ public class SerialService extends Service implements SerialListener {
         socket.connect(this);
         this.socket = socket;
         connected = true;
+        createNotification();
     }
 
     public void disconnect() {
@@ -162,24 +166,34 @@ public class SerialService extends Service implements SerialListener {
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             nm.createNotificationChannel(nc);
         }
-        Intent disconnectIntent = new Intent()
-                .setAction(Constants.INTENT_ACTION_DISCONNECT);
+
+//        Intent disconnectIntent = new Intent()
+//                .setAction(Constants.INTENT_ACTION_DISCONNECT);
         Intent restartIntent = new Intent()
                 .setClassName(this, Constants.INTENT_CLASS_MAIN_ACTIVITY)
                 .setAction(Intent.ACTION_MAIN)
                 .addCategory(Intent.CATEGORY_LAUNCHER);
-        PendingIntent disconnectPendingIntent = PendingIntent.getBroadcast(this, 1, disconnectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent disconnectPendingIntent = PendingIntent.getBroadcast(this, 1, disconnectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent restartPendingIntent = PendingIntent.getActivity(this, 1, restartIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
+//                .setSmallIcon(R.drawable.ic_notification)
+//                .setColor(getResources().getColor(R.color.colorPrimary))
+//                .setContentTitle(getResources().getString(R.string.app_name))
+//                .setContentText(socket != null ? "Connected to " + socket.getName() : "Background Service")
+//                .setContentIntent(restartPendingIntent)
+//                .setOngoing(true)
+//                .addAction(new NotificationCompat.Action(R.drawable.ic_clear_white_24dp, "Disconnect", disconnectPendingIntent));
+        // @drawable/ic_notification created with Android Studio -> New -> Image Asset using @color/colorPrimaryDark as background color
+        // Android < API 21 does not support vectorDrawables in notifications, so both drawables used here, are created as .png instead of .xml
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText(socket != null ? "Connected to " + socket.getName() : "Background Service")
                 .setContentIntent(restartPendingIntent)
-                .setOngoing(true)
-                .addAction(new NotificationCompat.Action(R.drawable.ic_clear_white_24dp, "Disconnect", disconnectPendingIntent));
-        // @drawable/ic_notification created with Android Studio -> New -> Image Asset using @color/colorPrimaryDark as background color
-        // Android < API 21 does not support vectorDrawables in notifications, so both drawables used here, are created as .png instead of .xml
+                .setOngoing(true);
+//                .addAction(new NotificationCompat.Action(R.drawable.ic_clear_white_24dp, "Disconnect", disconnectPendingIntent));
         Notification notification = builder.build();
         startForeground(Constants.NOTIFY_MANAGER_START_FOREGROUND_SERVICE, notification);
     }
