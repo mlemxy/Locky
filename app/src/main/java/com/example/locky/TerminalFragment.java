@@ -96,6 +96,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             Log.i("starting serial service", "running");
             getActivity().startService(new Intent(getActivity(), SerialService.class));
             Log.i("serial service", String.valueOf(service));
+            Log.i("activity", String.valueOf(getActivity()));
             send("");
         }// prevents service destroy on unbind from recreated activity caused by orientation change
     }

@@ -1,12 +1,17 @@
 package com.example.locky;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.Editable;
@@ -26,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -94,6 +100,7 @@ public class CollectFragment extends Fragment implements ServiceConnection, Seri
             Log.i("starting serial service", "running");
             getActivity().startService(new Intent(getActivity(), SerialService.class));
             Log.i("serial service", String.valueOf(service));
+            Log.i("activity", String.valueOf(getActivity()));
         }// prevents service destroy on unbind from recreated activity caused by orientation change
     }
 
@@ -444,5 +451,6 @@ public class CollectFragment extends Fragment implements ServiceConnection, Seri
         disconnect();
         Toast.makeText(getActivity(), "Connection lost!", Toast.LENGTH_SHORT).show();
     }
+
 
 }

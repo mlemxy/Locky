@@ -1,9 +1,12 @@
 package com.example.locky;
 
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,7 +41,7 @@ public class Collect extends ListFragment {
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
     private ArrayAdapter<BluetoothDevice> listAdapter;
-
+    private SerialService service;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,6 +92,7 @@ public class Collect extends ListFragment {
                 text1.setText(device.getName());
                 text2.setText(device.getAddress());
                 return view;
+
             }
         };
         Log.i("listadapter", String.valueOf(listAdapter.getCount()));
@@ -211,6 +215,7 @@ public class Collect extends ListFragment {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
 
 }
