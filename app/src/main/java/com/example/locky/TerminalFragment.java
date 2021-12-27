@@ -36,6 +36,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -342,6 +346,22 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 @Override
                 public void onFailure(@NonNull Exception e) {
                 }
+            });
+
+            // booking db
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("booked_date", date);
+            data.put("booker", signInAccount.getEmail());
+            data.put("collection_status", false);
+            data.put("locker", lockerNum.toLowerCase());
+            data.put("receiver", str);
+
+            db.collection("booking").add(data).addOnSuccessListener(documentReference -> {
+                String id = documentReference.getId();
+                db.collection("booking").document(id).update("id", id);
             });
 
             Random random = new Random();
