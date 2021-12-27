@@ -238,6 +238,7 @@ public class CollectFragment extends Fragment implements ServiceConnection, Seri
                             Toast.makeText(getActivity(), "AVAILABLE!", Toast.LENGTH_SHORT).show();
 
                         } else if (fxBTresponse.charAt(1) == 'B') {
+                            view.findViewById(R.id.textView).setVisibility(View.GONE);
                             view.findViewById(R.id.confirmPWrow).setVisibility(View.GONE);
                             view.findViewById(R.id.unlockPWrow).setVisibility(View.GONE);
                             view.findViewById(R.id.buttonrow).setVisibility(View.GONE);
