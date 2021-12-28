@@ -33,10 +33,22 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthProvider;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,16 +70,16 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private String lockerNum;
 
 
-    //private TextUtil.HexWatcher hexWatcher;
-
     private Connected connected = Connected.False;
     private boolean initialStart = true;
-    //    private boolean hexEnabled = false;
     private boolean pendingNewline = false;
     private String newline = TextUtil.newline_crlf;
 
     private String BTresponse;
     private String bufBTresponse;
+
+    private boolean userExist = false;
+
 
     /*
      * Lifecycle
@@ -337,42 +349,62 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             Log.i("after", str);
         } else {
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference lockerRef = db.collection("locker").document(lockerNum.toLowerCase());
 
-            lockerRef.update("booked_status", true, "receiver", str, "booked_by", signInAccount.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                }
-            });
+            String email = sendText.getText().toString().trim();
+            String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-            // booking db
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            Date date = new Date();
+            if (email.matches(emailPattern))
+            {
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("booked_date", date);
-            data.put("booker", signInAccount.getEmail());
-            data.put("collection_status", false);
-            data.put("locker", lockerNum.toLowerCase());
-            data.put("receiver", str);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference lockerRef = db.collection("locker").document(lockerNum.toLowerCase());
+                DocumentReference userRef = db.collection("user").document(str);
 
-            db.collection("booking").add(data).addOnSuccessListener(documentReference -> {
-                String id = documentReference.getId();
-                db.collection("booking").document(id).update("id", id);
-            });
+                lockerRef.update("booked_status", true, "receiver", str, "booked_by", signInAccount.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
 
-            Random random = new Random();
-            int r = random.nextInt(999999);
-            str = ('$' + String.valueOf(r) + "#");
-            Log.i("random", str);
+                // booking db
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date date = new Date();
+
+                Map<String, Object> data = new HashMap<>();
+                data.put("booked_date", date);
+                data.put("booker", signInAccount.getEmail());
+                data.put("collection_status", false);
+                data.put("locker", lockerNum.toLowerCase());
+                data.put("receiver", str);
+
+                db.collection("booking").add(data).addOnSuccessListener(documentReference -> {
+                    String id = documentReference.getId();
+                    db.collection("booking").document(id).update("id", id);
+                });
+
+                Random random = new Random();
+                int r = random.nextInt(999999);
+                str = ('$' + String.valueOf(r) + "#");
+                Log.i("random", str);
+
+                Toast.makeText(getContext(),"valid email address",Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(getContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
+            }
 
 
-        }
+            }
+
+//            else {
+//                Toast.makeText(getActivity(),"Invalid user",Toast.LENGTH_SHORT).show();
+//            }
+////        }
 
         if (connected != Connected.True) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
