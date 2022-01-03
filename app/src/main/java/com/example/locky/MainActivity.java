@@ -3,6 +3,7 @@ package com.example.locky;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Build;
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
 
         }
-
         timer = new CountDownTimer(30000, 5000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -112,11 +112,9 @@ public class MainActivity extends AppCompatActivity {
                                             builder.setAutoCancel(true);
                                             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
                                             managerCompat.notify(1, builder.build());
-                                        } else {
-                                        }
+                                        } else {}
                                     }
-                                } else {
-                                }
+                                } else {}
                             }
                         });
             }
