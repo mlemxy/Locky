@@ -188,6 +188,20 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
 
+                            // user db
+                            DocumentReference newUserRef = db.collection("user").document(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                            GoogleUser googleUser = new GoogleUser();
+                            googleUser.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            newUserRef.set(googleUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                    } else {
+                                    }
+                                }
+                            });
+
+
                             Intent intent = new Intent(getApplicationContext(), Profile.class);
                             startActivity(intent);
 
