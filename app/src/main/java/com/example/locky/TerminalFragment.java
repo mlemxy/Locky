@@ -3,10 +3,13 @@ package com.example.locky;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,6 +23,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -41,6 +46,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpResponse;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.NameValuePair;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.ClientProtocolException;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.entity.UrlEncodedFormEntity;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpPost;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.message.BasicNameValuePair;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -50,9 +63,16 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.http.HttpService;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -68,7 +88,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private TextView sendText;
     private TextView sendText2;
     private String lockerNum;
-
 
     private Connected connected = Connected.False;
     private boolean initialStart = true;
@@ -370,6 +389,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                     }
                 });
 
+
                 // booking db
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 Date date = new Date();
@@ -391,6 +411,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 str = ('$' + String.valueOf(r) + "#");
                 Log.i("random", str);
 
+                postData();
+
                 Toast.makeText(getContext(),"valid email address",Toast.LENGTH_SHORT).show();
             }
             else
@@ -398,13 +420,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 Toast.makeText(getContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
             }
 
-
             }
-
-//            else {
-//                Toast.makeText(getActivity(),"Invalid user",Toast.LENGTH_SHORT).show();
-//            }
-////        }
 
         if (connected != Connected.True) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
@@ -435,6 +451,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             onSerialIoError(e);
         }
     }
+
+    public void postData() {
+//        Web3j web3j =  Web3j.build(new HttpService("https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"));
+        Uri webpage = Uri.parse("https://lockyv2.herokuapp.com/");
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+        startActivity(webIntent);
+
+    }
+
 
     private void receive(byte[] data) {
         String msg = new String(data);
