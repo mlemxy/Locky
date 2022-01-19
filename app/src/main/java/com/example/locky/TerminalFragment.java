@@ -52,8 +52,10 @@ import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.C
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.entity.UrlEncodedFormEntity;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpPost;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.utils.URIBuilder;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.message.BasicNameValuePair;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.protocol.HTTP;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -68,6 +70,7 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -401,17 +404,36 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 data.put("locker", lockerNum.toLowerCase());
                 data.put("receiver", str);
 
+                URIBuilder ub = null;
+                try {
+                    ub = new URIBuilder("https://lockyv2.herokuapp.com/");
+                    ub.addParameter("newReciever", str);
+                    ub.addParameter("newLockerNumber", lockerNum.toLowerCase());
+                    ub.addParameter("newBooker", signInAccount.getEmail());
+                    ub.addParameter("newDocumentID", db.collection("booking").document().getId());
+
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+
+
                 db.collection("booking").add(data).addOnSuccessListener(documentReference -> {
                     String id = documentReference.getId();
                     db.collection("booking").document(id).update("id", id);
+
                 });
+
+                String url = ub.toString();
+                Uri webpage = Uri.parse(url);
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+
 
                 Random random = new Random();
                 int r = random.nextInt(999999);
                 str = ('$' + String.valueOf(r) + "#");
                 Log.i("random", str);
 
-                postData();
+                startActivity(webIntent);
 
                 Toast.makeText(getContext(),"valid email address",Toast.LENGTH_SHORT).show();
             }
@@ -453,10 +475,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     }
 
     public void postData() {
-//        Web3j web3j =  Web3j.build(new HttpService("https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"));
-        Uri webpage = Uri.parse("https://lockyv2.herokuapp.com/");
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
-        startActivity(webIntent);
 
     }
 
