@@ -461,6 +461,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     }
 
 
+
     private void receive(byte[] data) {
         String msg = new String(data);
         Log.i("msg3", msg);
