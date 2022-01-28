@@ -41,12 +41,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.utils.URIBuilder;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.net.URISyntaxException;
 import java.util.Random;
 
 // Unlock page from collect fragment
@@ -341,6 +343,18 @@ public class CollectFragment extends Fragment implements ServiceConnection, Seri
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference lockerRef = db.collection("locker").document(lockerNum.toLowerCase());
 
+
+            URIBuilder ub = null;
+            try {
+                ub = new URIBuilder("https://.herokuapp.com/");
+                ub.addParameter("newReciever2", );
+                ub.addParameter("newLockerNumber2", lockerNum.toLowerCase());
+                ub.addParameter("newBooker2", signInAccount.getEmail());
+
+
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
 
             lockerRef.update("booked_status", false, "receiver", "", "booked_by", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
