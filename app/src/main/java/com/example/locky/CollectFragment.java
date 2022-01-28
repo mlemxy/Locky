@@ -49,6 +49,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Random;
 
+// Unlock page from collect fragment
+
 public class CollectFragment extends Fragment implements ServiceConnection, SerialListener {
 
     private enum Connected {False, Pending, True}

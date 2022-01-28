@@ -1,5 +1,7 @@
 package com.example.locky;
 
+// Part of SerialService
+
 interface SerialListener {
     void onSerialConnect      ();
     void onSerialConnectError (Exception e);

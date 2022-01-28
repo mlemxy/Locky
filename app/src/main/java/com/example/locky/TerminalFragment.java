@@ -80,6 +80,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+// Locking page from booking fragment
+
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
     private enum Connected {False, Pending, True}

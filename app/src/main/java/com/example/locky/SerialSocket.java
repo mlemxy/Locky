@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 
+// Part of SerialService
+
 class SerialSocket implements Runnable {
 
     private static final UUID BLUETOOTH_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");

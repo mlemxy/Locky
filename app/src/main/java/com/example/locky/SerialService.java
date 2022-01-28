@@ -24,6 +24,7 @@ import java.util.Queue;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 /**
+ * Bluetooth service
  * create notification and queue serial data while activity is not in the foreground
  * use listener chain: SerialSocket -> SerialService -> UI fragment
  */
